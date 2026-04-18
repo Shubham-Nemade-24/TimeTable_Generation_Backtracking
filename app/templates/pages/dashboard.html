@@ -1,0 +1,249 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'timetable_list' %}">
+                            <i class="fas fa-calendar"></i> Timetables
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'course_list' %}">
+                            <i class="fas fa-book"></i> Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'instructor_list' %}">
+                            <i class="fas fa-chalkboard-teacher"></i> Instructors
+                        </a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item mt-3">
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
+                            <span>Admin</span>
+                        </h6>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <span class="text-muted">Welcome, <strong>{{ user.username }}</strong></span>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row">
+                <!-- Courses Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Total Courses</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_courses }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-book fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructors Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Total Instructors</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_instructors }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Venues Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Total Venues</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_venues }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-map-marker-alt fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timetables Card -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Total Timetables</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_timetables }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Section -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Generate Timetable Action -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-magic fa-3x text-primary mb-3"></i>
+                                            <h5>Generate Timetable</h5>
+                                            <p class="text-muted">Use backtracking algorithm to auto-generate timetable</p>
+                                            <a href="{% url 'index' %}" class="btn btn-primary">
+                                                <i class="fas fa-cogs"></i> Generate
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Send Timetable Action -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-envelope fa-3x text-success mb-3"></i>
+                                            <h5>Send Timetable</h5>
+                                            <p class="text-muted">Email timetable to students or staff</p>
+                                            <a href="{% url 'send_timetable' %}" class="btn btn-success">
+                                                <i class="fas fa-paper-plane"></i> Send Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View All Timetables -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-calendar-alt fa-3x text-info mb-3"></i>
+                                            <h5>View Timetables</h5>
+                                            <p class="text-muted">Browse all saved timetable entries</p>
+                                            <a href="{% url 'timetable_list' %}" class="btn btn-info">
+                                                <i class="fas fa-list"></i> View All
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Row of Actions -->
+                            <div class="row mt-2">
+                                <!-- View Courses -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-book fa-3x text-warning mb-3"></i>
+                                            <h5>View Courses</h5>
+                                            <p class="text-muted">Browse all available courses</p>
+                                            <a href="{% url 'course_list' %}" class="btn btn-warning">
+                                                <i class="fas fa-book-open"></i> View Courses
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Instructors -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-chalkboard-teacher fa-3x text-danger mb-3"></i>
+                                            <h5>View Instructors</h5>
+                                            <p class="text-muted">Browse all registered instructors</p>
+                                            <a href="{% url 'instructor_list' %}" class="btn btn-danger">
+                                                <i class="fas fa-users"></i> View Instructors
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if user.is_staff %}
+                                <!-- Admin Panel -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-cog fa-3x text-secondary mb-3"></i>
+                                            <h5>Admin Panel</h5>
+                                            <p class="text-muted">Full admin access to manage data</p>
+                                            <a href="{% url 'admin:index' %}" class="btn btn-secondary">
+                                                <i class="fas fa-tools"></i> Admin Panel
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: .25rem solid #4e73df!important;
+}
+.border-left-success {
+    border-left: .25rem solid #1cc88a!important;
+}
+.border-left-info {
+    border-left: .25rem solid #36b9cc!important;
+}
+.border-left-warning {
+    border-left: .25rem solid #f6c23e!important;
+}
+</style>
+{% endblock %}
